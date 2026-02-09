@@ -87,6 +87,8 @@ In the dynamic environment, RL achieves much faster response and dramatically lo
 **Q-learning with occupancy randomness (Table 4.2):** SoftMax again gives the best average reward (12.16).  
 **Double Q-learning (Table 4.3):** UCB performs best on average reward (18.85) and is more efficient on average episode length (7.18).
 
+Full thesis report: [Download PDF](report/Dissertation_2024_Jesutomito.docx)
+
 ## Contact
 If you’d like to discuss the project or see implementation details, feel free to reach out:
 - Email: jesutomorak@gmail.com
