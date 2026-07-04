@@ -1,95 +1,144 @@
-# MSc Thesis Project — Reinforcement Learning for HVAC Temperature Control (RL vs PID)
+# Reinforcement Learning for Adaptive HVAC Temperature Control
 
-**Focus:** Adaptive temperature control in a simulated HVAC room environment using Reinforcement Learning (Q-learning / Double Q-learning) and comparison against a traditional PID controller.
+Python implementations developed for my MSc thesis:
 
-**Tools:** MATLAB, Simulink and Python
+> **Reinforcement Learning for Adaptive Control Systems: Temperature Control Systems in an HVAC Unit**  
+> MSc Advanced Control Systems, University of Salford, 2024
 
-## Problem
-HVAC controllers must keep indoor temperature comfortable while avoiding slow responses and inefficient control actions. Classical controllers like PID can work well but may struggle in dynamic conditions (e.g., changing occupancy-driven setpoints and varying external temperature).
+The project investigates reinforcement-learning approaches for temperature regulation in a simplified simulated HVAC environment. It includes tabular Q-learning, occupancy-aware control, Double Q-learning, Deep Q-learning and comparisons with PID control.
 
-This project investigates whether a Reinforcement Learning (RL) controller can learn an effective control policy for temperature regulation in a simulated HVAC environment, and how it compares to a PID baseline under the same conditions.
+## Repository structure
 
-## Data / Simulation Environment
-Because real HVAC experiments are costly and slow, the work is evaluated in a **simulation environment** representing room temperature dynamics.
+```text
+code/
+  01_q_learning_basic.py
+  02_q_learning_exploration_strategies.py
+  03_q_learning_occupancy.py
+  04_q_learning_occupancy_strategies.py
+  05_double_q_learning_seasons.py
+  06_double_q_learning_exploration_strategies.py
+  07_rl_vs_pid_epsilon.py
+  08_rl_vs_pid_softmax.py
+  09_dqn_hvac.py
 
-Key environment design:
-- **Temperature discretization:** 10 bins covering **15°C to 30°C**
-- **Time-of-day discretization:** **24 bins** (0–23 hours)
-- **Occupancy:** 2 bins (**occupied / unoccupied**)
-- **Actions:** 5 discrete actions (0–4) representing different HVAC adjustment levels (heating → cooling)
-- **Target temperature (setpoint) changes with occupancy:**
-  - **22°C when occupied**
-  - **18°C when unoccupied**
-- **Dynamics / realism:** occupancy status changes (randomly), time-of-day advances, and external temperature varies across time (including winter/summer comparisons in Double Q-learning)
-- **Reward design:** higher reward when the room temperature deviation from target is small:
-  - high reward when deviation < **0.5°C**
-  - medium reward when deviation between **0.5°C and 1°C**
-  - negative reward when deviation > **1°C**
+notebooks/
+  Q_Learning_Occupancy_and_Double_Q_Learning.ipynb
+  RL_vs_PID.ipynb
 
-## Method (RL vs PID)
+results/
+  EXPERIMENTAL_RESULTS.md
+  figures/
 
-### Baseline: PID Controller
-A traditional PID controller is used as the benchmark. It adjusts HVAC control based on temperature error to the setpoint. This serves as the reference for response time and energy consumption in the dynamic environment.
+docs/
+  Morakinyo_MSc_Thesis.pdf
+```
 
-### Reinforcement Learning Controller (Q-learning / Double Q-learning)
-RL treats temperature regulation as a sequential decision-making task:
-- **State:** (temperature bin, time bin, occupancy)
-- **Action:** one of 5 HVAC adjustment levels
-- **Reward:** based on deviation from target temperature and efficiency-related behaviour
+The executed notebooks contain the project outputs and figures. The numbered Python files organise the experiments by method.
 
-Exploration strategies tested (Q-learning):
-- **Epsilon-Greedy**
-- **SoftMax**
-- **UCB (Upper Confidence Bound)**
+## Experiments
 
-A Double Q-learning model is also evaluated (including winter/summer scenarios) to reduce overestimation bias and improve stability.
+### 1. Basic Q-learning
 
-## Evaluation Metrics (as used in the thesis)
-Instead of classic control metrics (overshoot/settling time/IAE), the evaluation in this project focuses on:
+A tabular Q-learning controller regulates a simplified room temperature around a 22°C target using ten temperature states and five discrete HVAC actions.
 
-1) **Response Time**  
-How quickly the controller reaches/maintains the target region (in RL setups, episodes can terminate when within ±0.5°C or when the max step limit is reached).
+### 2. Exploration strategies
 
-2) **Accuracy (thesis-defined)**  
-An accuracy measure computed in the thesis to quantify tracking performance relative to the target temperature.
+The project compares:
 
-3) **Energy Consumption**  
-A numerical energy usage measure produced by the simulation environment (efficiency proxy).
+- epsilon-greedy;
+- SoftMax action selection;
+- Upper Confidence Bound (UCB).
 
-4) **RL Training Metrics**
-- **Episode reward**
-- **Episode length** (steps to completion / termination)
+### 3. Occupancy-aware control
 
-## Robustness Tests (realistic variability)
-Robustness is tested by introducing dynamism into the environment:
-- **Random initial temperature / starting conditions**
-- **Occupancy-driven setpoint switching (22°C ↔ 18°C)**
-- **Time-of-day behaviour (24-hour bins influencing dynamics)**
-- **External temperature variation**
-- **Seasonal comparisons (winter vs summer) in Double Q-learning**
+The state space includes:
 
-## Results Snapshot
-In the dynamic environment, RL achieves much faster response and dramatically lower energy use than PID:
+- temperature bin;
+- hour of day;
+- occupied or unoccupied status.
 
-| Comparison | Controller | Accuracy (thesis metric) | Response Time | Energy Consumption |
-|---|---:|---:|---:|---:|
-| RL vs PID (Epsilon-Greedy) | RL  | 0.25 | 4.32 | 15.42 |
-| RL vs PID (Epsilon-Greedy) | PID | 0.32 | 50.00 | 7889.75 |
-| RL vs PID (SoftMax) | RL  | 0.24 | 4.13 | 12.75 |
-| RL vs PID (SoftMax) | PID | 0.32 | 50.00 | 7889.75 |
+The target temperature is 22°C while occupied and 18°C while unoccupied.
 
-**Interpretation (plain English):**
-- RL reaches the target region far quicker (≈ 4 steps vs PID hitting max/slow response at 50).
-- PID is extremely energy-inefficient in this unstable/dynamic environment, while RL remains low-energy.
+### 4. Double Q-learning
 
-### Exploration Strategy Comparisons (Q-learning & Double Q-learning)
-**Q-learning (Table 4.1):** SoftMax has the best average reward (9.86) vs Epsilon-Greedy (7.15) and UCB (7.27).  
-**Q-learning with occupancy randomness (Table 4.2):** SoftMax again gives the best average reward (12.16).  
-**Double Q-learning (Table 4.3):** UCB performs best on average reward (18.85) and is more efficient on average episode length (7.18).
+Two Q-tables are used in seasonal simulations and in a separate comparison of epsilon-greedy, SoftMax and UCB exploration.
 
-Full thesis report: [Download PDF](report/Dissertation_2024_Jesutomito.docx)
+### 5. Reinforcement learning versus PID
 
-## Contact
-If you’d like to discuss the project or see implementation details, feel free to reach out:
-- Email: jesutomorak@gmail.com
-- LinkedIn: https://www.linkedin.com/in/jesutomito-morakinyo-83b97a123
+Epsilon-greedy and SoftMax reinforcement-learning controllers are compared with a traditional PID controller using:
+
+- final temperature error;
+- response time;
+- the original internal action/control-effort calculation.
+
+### 6. Deep Q-Network
+
+The DQN experiment uses:
+
+- a one-dimensional normalized state;
+- five actions;
+- two hidden layers with 32 neurons each;
+- ReLU activation;
+- Adam optimisation;
+- experience replay;
+- checkpoint saving;
+- early stopping;
+- up to 10,000 training episodes.
+
+## Main simulation settings
+
+- Room size: 50 m²
+- Insulation coefficient: 0.1
+- HVAC power parameter: 5
+- Temperature range: 15–30°C
+- Temperature bins: 10
+- Action count: 5
+- Occupied target: 22°C
+- Unoccupied target: 18°C
+- Time-of-day bins: 24 where applicable
+
+## Installation
+
+```bash
+python -m venv .venv
+```
+
+Windows:
+
+```bash
+.venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+macOS/Linux:
+
+```bash
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+## Running an experiment
+
+From the repository root:
+
+```bash
+python code/01_q_learning_basic.py
+```
+
+The original experiments can be computationally demanding. Some tabular experiments use up to 1,000,000 episodes, and the DQN uses up to 10,000 episodes.
+
+## Results
+
+The numerical outputs from the experiments are summarised in [`results/EXPERIMENTAL_RESULTS.md`](results/EXPERIMENTAL_RESULTS.md). The figures are available in [`results/figures`](results/figures).
+
+## Scope
+
+This study uses a simplified simulated room environment rather than a calibrated real-building HVAC installation. Results therefore describe the simulation and parameter settings used in the thesis.
+
+The variable called `energy_consumption` in the RL-versus-PID scripts represents the calculation used in the original experiment. It should be interpreted as an internal control-effort proxy rather than measured energy in kWh.
+
+## Author
+
+**Jesutomito Morakinyo**  
+MSc Advanced Control Systems  
+University of Salford
