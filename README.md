@@ -69,7 +69,7 @@ Epsilon-greedy and SoftMax reinforcement-learning controllers are compared with 
 
 - final temperature error;
 - response time;
-- the original internal action/control-effort calculation.
+- an internal action/control-effort calculation.
 
 ### 6. Deep Q-Network
 
@@ -125,7 +125,7 @@ From the repository root:
 python code/01_q_learning_basic.py
 ```
 
-The original experiments can be computationally demanding. Some tabular experiments use up to 1,000,000 episodes, and the DQN uses up to 10,000 episodes.
+The experiments can be computationally demanding. Some tabular experiments use up to 1,000,000 episodes, and the DQN uses up to 10,000 episodes.
 
 ## Results
 
@@ -135,7 +135,7 @@ The numerical outputs from the experiments are summarised in [`results/EXPERIMEN
 
 This study uses a simplified simulated room environment rather than a calibrated real-building HVAC installation. Results therefore describe the simulation and parameter settings used in the thesis.
 
-The variable called `energy_consumption` in the RL-versus-PID scripts represents the calculation used in the original experiment. It should be interpreted as an internal control-effort proxy rather than measured energy in kWh.
+The variable called `energy_consumption` in the RL-versus-PID scripts represents an internal control-effort proxy rather than measured electrical energy in kWh. It should be interpreted as an internal control-effort proxy rather than measured energy in kWh.
 
 ## Author
 
