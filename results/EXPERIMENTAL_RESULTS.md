@@ -68,4 +68,4 @@ The values below are taken from the saved outputs of the executed project notebo
 | Average response time | 4.13 | 50.00 |
 | Internal control-effort calculation | 12.75 | 7889.75 |
 
-The quantity labelled `energy_consumption` in the original comparison code is an internal action/control-effort calculation. It is not measured electrical energy in kWh.
+The quantity labelled `energy_consumption` is an internal action/control-effort calculation. It is not measured electrical energy in kWh.
