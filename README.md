@@ -5,7 +5,7 @@ Python implementations developed for my MSc thesis:
 > **Reinforcement Learning for Adaptive Control Systems: Temperature Control Systems in an HVAC Unit**  
 > MSc Advanced Control Systems, University of Salford, 2024
 
-The project investigates reinforcement-learning approaches for temperature regulation in a simplified simulated HVAC environment. It includes tabular Q-learning, occupancy-aware control, Double Q-learning, Deep Q-learning and comparisons with PID control.
+The project investigates reinforcement-learning approaches for temperature regulation in a simplified simulated HVAC environment. It includes tabular Q-learning, occupancy-aware control, Double Q-learning, Deep Q-learning and an exploratory comparison with PID control.
 
 ## Repository structure
 
@@ -135,7 +135,7 @@ The numerical outputs from the experiments are summarised in [`results/EXPERIMEN
 
 This study uses a simplified simulated room environment rather than a calibrated real-building HVAC installation. Results therefore describe the simulation and parameter settings used in the thesis.
 
-The variable called `energy_consumption` in the RL-versus-PID scripts represents an internal control-effort proxy rather than measured electrical energy in kWh. It should be interpreted as an internal control-effort proxy rather than measured energy in kWh.
+The variable called `energy_consumption` in the RL-versus-PID scripts represents an internal control-effort proxy rather than measured electrical energy in kWh.
 
 ## Author
 
